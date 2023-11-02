@@ -1,0 +1,151 @@
+{% extends 'base.html' %}
+{% include 'header.html' %}
+
+{% block title %}{% endblock %}
+
+{% block body %}
+
+<div class="container">
+    <div class="row">
+        <div class="col md-12">
+            <div class="jumbotron p-3">
+                <h2> <b>Gerenciamento de Itens de Equipamentos</b> <button type="button" class="btn btn-success float-end"
+                        data-bs-toggle="modal" data-bs-target="#mymodal">Adicionar novo Item</button> </h2>
+                {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                {% for message in messages %}
+                <div class="alert alert-success alert-dismissible" role="alert">
+                    <button type="button" class="close float-end" data-bs-dismiss="alert" aria-label="close">
+                        <span class="icon">x</span>
+                    </button>
+                    {{message}}
+                </div>
+                {% endfor %}
+                {% endif %}
+                {% endwith %}
+                <table class="table table-hover">
+                    <tr>
+                        <td>Patrimônio</td>
+                        <td>Descrição</td>
+                        <td>MAC</td>
+                        <td>Fonte</td>
+                        <td>Volts</td>
+                        <td>Ampere</td>
+                        <td>Categoria</td>
+                        <td>Ação</td>
+                    </tr>
+                    {% for row in employees %}
+                    <tr>
+                        <td>{{row.id_patrimonio}}</td>
+                        <td>{{row.nome}}</td>
+                        <td>{{row.mac}}</td>
+                        <td>{{row.fonte}}</td>
+                        <td>{{row.volts}}</td>
+                        <td>{{row.ampere}}</td>
+                        <td>{{row.categoria}}</td>
+                        <td>
+                            <a href="/update/{{row.id_patrimonio}}" class="btn btn-warning btn-xs" data-bs-toggle="modal"
+                                data-bs-target="#modaledit{{row.id_patrimonio}}">Editar</a>
+                            <a href="/delete/{{row.id_patrimonio}}" class="btn btn-danger btn-xs"
+                                onclick="return confirm('Tem certeza que deseja deletar esse item')">Deletar</a>
+                        </td>
+                    </tr>
+                    <div class="modal fade" id="modaledit{{row.id_patrimonio}}" tabindex="-1" aria-labelledby="exampleModalLabel"
+                        aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Editar Itens</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form action="{{url_for('update')}}" method="POST">
+                                        <div class="form-group">
+                                            <label>Descrição</label>
+                                            <input type="hidden" name="id_patrimonio" value="{{row.id_patrimonio}}">
+                                            <input type="text" class="form-control" name="nome" value="{{row.nome}}">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>MAC</label>
+                                            <input type="text" class="form-control" name="mac"
+                                                value="{{row.mac}}">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Fonte</label>
+                                            <input type="text" class="form-control" name="fonte" value="{{row.fonte}}">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Volts</label>
+                                            <input type="number" class="form-control" name="volts" value="{{row.volts}}">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Ampere</label>
+                                            <input type="number" class="form-control" name="ampere" value="{{row.ampere}}">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Categoria</label>
+                                            <input type="text" class="form-control" name="categoria" value="{{row.categoria}}">
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="submit" class="btn btn-primary">Salvar</button>
+                                            <button type="button" class="btn btn-secondary"
+                                                data-bs-dismiss="modal">Cancelar</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </table>
+            </div>
+
+            <div class="modal fade" id="mymodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Cadastro de Equipamentos</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="{{url_for('insert')}}" method="POST">
+                                <div class="form-group">
+                                    <label>Descrição</label>
+                                    <input type="text" class="form-control" name="nome" required='1'>
+                                </div>
+                                <div class="form-group">
+                                    <label>MAC</label>
+                                    <input type="text" class="form-control" name="mac" required='1'>
+                                </div>
+                                <div class="form-group">
+                                    <label>Fonte</label>
+                                    <input type="text" class="form-control" name="fonte" required='1'>
+                                </div>
+                                <div class="form-group">
+                                    <label>Volts</label>
+                                    <input type="number" class="form-control" name="volts" required='1'>
+                                </div>
+                                <div class="form-group">
+                                    <label>Ampere</label>
+                                    <input type="number" class="form-control" name="ampere" required='1'>
+                                </div>
+                                <div class="form-group">
+                                    <label>Categoria</label>
+                                    <input type="text" class="form-control" name="categoria" required='1'>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="submit" class="btn btn-primary">Salvar</button>
+                                    <button type="button" class="btn btn-secondary float-end"
+                                        data-bs-dismiss="modal">Cancelar</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
