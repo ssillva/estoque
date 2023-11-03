@@ -26,6 +26,7 @@
                 <table class="table table-hover">
                     <tr>
                         <td>Patrimônio</td>
+                        <td>Criado em</td>
                         <td>Descrição</td>
                         <td>MAC</td>
                         <td>Fonte</td>
@@ -37,6 +38,7 @@
                     {% for row in employees %}
                     <tr>
                         <td>{{row.id_patrimonio}}</td>
+                        <td>{{row.data_cadastro}}</td>
                         <td>{{row.nome}}</td>
                         <td>{{row.mac}}</td>
                         <td>{{row.fonte}}</td>
@@ -68,8 +70,8 @@
                                         </div>
                                         <div class="form-group">
                                             <label>MAC</label>
-                                            <input type="text" class="form-control" name="mac"
-                                                value="{{row.mac}}">
+                                            <input type="text"  class="form-control" name="mac"
+                                                value="{{row.mac}}" data-inputmask="'mask' : '***-***-***-***'">
                                         </div>
                                         <div class="form-group">
                                             <label>Fonte</label>
@@ -105,7 +107,7 @@
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Cadastro de Equipamentos</h5>
+                            <h5 class="modal-title" id="exampleModalLabel">Cadastro de Itens</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
@@ -116,7 +118,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label>MAC</label>
-                                    <input type="text" class="form-control" name="mac" required='1'>
+                                    <input type="text" class="form-control" name="mac" required='1' data-inputmask="'mask' : '***-***-***-***'">
                                 </div>
                                 <div class="form-group">
                                     <label>Fonte</label>
@@ -147,5 +149,5 @@
         </div>
     </div>
 </div>
-
+<script src="{{ url_for('static', filename='jquery.inputmask/dist/min/jquery.inputmask.bundle.min.js') }}"></script>
 {% endblock %}
