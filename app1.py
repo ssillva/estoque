@@ -1,19 +1,18 @@
 from imp import reload
-from sqlalchemy import inspect
+from sqlalchemy import inspect, text
 from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from datetime import date
 import sys
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqldb://root:vertrigo@192.168.1.5/mkradius'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:vertrigo@172.31.255.2/mkradius'
 
     #'sqlite:///estoque.db'
 app.config['SECRET_KEY'] = 'secret-key'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 
 db = SQLAlchemy(app)
-
 
 cse_entradahist = db.Table('cse_entradahist',
                                db.Column('data_entrada', db.Date, nullable=False, default=date.today),
@@ -37,11 +36,19 @@ class Sis_produto(db.Model):
     __tablename__ = 'sis_produto'
     id = db.Column(db.Integer, primary_key=True)
     nome = db.Column(db.String(255), nullable=False)
+    descricao = db.Column(db.String(255), nullable=False)
     grupo = db.Column(db.String(128), nullable=False)
     fk_id_item = db.relationship('Sis_item', backref='sis_produto', lazy=True)#primaryjoin="Sis_produto.id == Sis_item.produto_id")
 
     def toDict(self):
 	    return {c.key: getattr(self, c.key) for c in inspect(self).mapper.column_attrs}
+    
+    def custom(self):
+        my_query = 'SELECT id, nome, descricao, grupo FROM sis_produto'
+        results = db.session.execute(my_query)
+
+        return results.fetchall()
+
 class Sis_acesso(db.Model):
     __tablename__ = 'sis_acesso'
     idacesso = db.Column(db.Integer, primary_key=True)
@@ -121,6 +128,39 @@ class Cse_saida (db.Model):
     item_id = db.Column(db.Integer, db.ForeignKey('sis_item.id_patrimonio'),
                                    primary_key=True)
 """
+@app.route("/produtos/", methods=['GET'])
+def get_produto():
+    '''all_data = Sis_produto.query.all()
+    all_dataArr = []
+    for item in all_data:
+        all_dataArr.append(item.toDict())
+    return jsonify(produto=all_dataArr)'''
+    all_data = Sis_produto()
+    all_dataArr = []
+    for item in all_data.custom():
+         all_dataArr.append(dict(item))
+    return jsonify(produto=all_dataArr)
+
+@app.route('/produtos/<id>/', methods=['GET'])
+def get_produto_id(id):
+    my_data = Sis_produto.query.get(id)
+    
+    return jsonify(produto_id=my_data)
+
+@app.route("/itens/", methods=['GET'])
+def get_item():
+    all_data = Sis_item.query.all()
+    all_dataArr = []
+    for item in all_data:
+	    all_dataArr.append(item.toDict())
+    
+    return jsonify(item=all_dataArr)
+
+@app.route('/itens/<id>/', methods=['GET'])
+def get_item_id(id):
+    my_data = Sis_item.query.get(id)
+    
+    return jsonify(produto_id=my_data.toDict())
 @app.route("/teste", methods=['GET'])
 def Teste():
     all_data = Sis_produto.query.all()
