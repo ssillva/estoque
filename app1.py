@@ -36,6 +36,8 @@ cse_saidahist = db.Table('cse_saidahist',
 class Sis_produto(db.Model):
     __tablename__ = 'sis_produto'
     id = db.Column(db.Integer, primary_key=True)
+    nome = db.Column(db.String(255), nullable=False)
+    grupo = db.Column(db.String(128), nullable=False)
     fk_id_item = db.relationship('Sis_item', backref='sis_produto', lazy=True)#primaryjoin="Sis_produto.id == Sis_item.produto_id")
 
     def toDict(self):
@@ -126,7 +128,12 @@ def Teste():
     for item in all_data:
 	    all_dataArr.append(item.toDict())
 
-    return jsonify(all_dataArr)
+    all_data2 = Sis_item.query.all()
+    all_dataArr2 = []
+    for item in all_data2:
+        all_dataArr2.append(item.toDict())
+
+    return jsonify(produto=all_dataArr, item=all_dataArr2)
 
 @app.route("/")
 def Index():
