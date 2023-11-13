@@ -7,10 +7,10 @@ import random, string
 class Config(object):
     CSRF_ENABLED = True
     SECRET = 'ysb_92=qe#djf8%ng+a*#4rt#5%3*4k5%i2bck*gn@w3@f&-&'
-    TEMPLATE_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates')
+    TEMPLATE_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'base/templates')
     ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
     APP = None
-    SQLALCHEMY_DATABASE_URI = 'mysql+mysqldb://root:derly.,.01@localhost:3306/estoque'
+    SQLALCHEMY_DATABASE_URI = 'mysql+mysqldb://root:vertrigo@192.168.1.5:3306/mkradius'
     #Preencha com os dados do seu banco de dados
     # User - Usuário do banco # Passwd - Senha do usuário
     # Host - Geralmente no local fica localhost

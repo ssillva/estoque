@@ -1,9 +1,4 @@
-from flask_sqlalchemy import SQLAlchemy
-from datetime import datetime
-
-db = SQLAlchemy()
-
-class Equipamentos(db.Model):
+class Itens(db.Model):
     id_patrimonio = db.Column(db.Integer, primary_key=True)
     data_cadastro = db.Column(db.DateTime, default=datetime.utcnow)
     nome = db.Column(db.String(80), nullable=False)

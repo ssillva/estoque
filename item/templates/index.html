@@ -10,7 +10,7 @@
         <div class="col md-12">
             <div class="jumbotron p-3">
                 <h2> <b>Gerenciamento de Itens de Equipamentos</b> <button type="button" class="btn btn-success float-end"
-                        data-bs-toggle="modal" data-bs-target="#mymodal"><i class="bi bi-pencil-square"> </i>Adicionar novo Item</button> </h2>
+                        data-bs-toggle="modal" data-bs-target="#mymodal">Adicionar novo Item</button> </h2>
                 {% with messages = get_flashed_messages() %}
                 {% if messages %}
                 {% for message in messages %}
@@ -27,27 +27,29 @@
                     <tr>
                         <td>Patrimônio</td>
                         <td>Criado em</td>
-                        <td>Produto</td>
+                        <td>Descrição</td>
                         <td>MAC</td>
                         <td>Fonte</td>
                         <td>Volts</td>
                         <td>Ampere</td>
+                        <td>Categoria</td>
                         <td>Ação</td>
                     </tr>
                     {% for row in employees %}
                     <tr>
                         <td>{{row.id_patrimonio}}</td>
                         <td>{{row.data_cadastro}}</td>
-                        <td>{{row.produto_id}}</td>
+                        <td>{{row.nome}}</td>
                         <td>{{row.mac}}</td>
                         <td>{{row.fonte}}</td>
                         <td>{{row.volts}}</td>
                         <td>{{row.ampere}}</td>
+                        <td>{{row.categoria}}</td>
                         <td>
                             <a href="/update/{{row.id_patrimonio}}" class="btn btn-warning btn-xs" data-bs-toggle="modal"
-                                data-bs-target="#modaledit{{row.id_patrimonio}}"><i class="bi bi-arrow-clockwise"> </i>Editar</a>
+                                data-bs-target="#modaledit{{row.id_patrimonio}}">Editar</a>
                             <a href="/delete/{{row.id_patrimonio}}" class="btn btn-danger btn-xs"
-                                onclick="return confirm('Tem certeza que deseja deletar esse item')"><i class="bi bi-trash"> </i>Deletar</a>
+                                onclick="return confirm('Tem certeza que deseja deletar esse item')">Deletar</a>
                         </td>
                     </tr>
                     <div class="modal fade" id="modaledit{{row.id_patrimonio}}" tabindex="-1" aria-labelledby="exampleModalLabel"
@@ -64,12 +66,12 @@
                                         <div class="form-group">
                                             <label>Descrição</label>
                                             <input type="hidden" name="id_patrimonio" value="{{row.id_patrimonio}}">
-                                            <input type="number" class="form-control" name="produto_id" value="{{row.produto_id}}">
+                                            <input type="text" class="form-control" name="nome" value="{{row.nome}}">
                                         </div>
                                         <div class="form-group">
                                             <label>MAC</label>
                                             <input type="text"  class="form-control" name="mac"
-                                                value="{{row.mac}}" data-inputmask="'mask': '***:***:***:***'">
+                                                value="{{row.mac}}" data-inputmask="'mask' : '***-***-***-***'">
                                         </div>
                                         <div class="form-group">
                                             <label>Fonte</label>
@@ -81,7 +83,11 @@
                                         </div>
                                         <div class="form-group">
                                             <label>Ampere</label>
-                                            <input type="number" step="any" min="0" max="100" class="form-control" name="ampere" value="{{row.ampere}}">
+                                            <input type="number" class="form-control" name="ampere" value="{{row.ampere}}">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Categoria</label>
+                                            <input type="text" class="form-control" name="categoria" value="{{row.categoria}}">
                                         </div>
                                         <div class="modal-footer">
                                             <button type="submit" class="btn btn-primary">Salvar</button>
@@ -107,12 +113,12 @@
                         <div class="modal-body">
                             <form action="{{url_for('insert')}}" method="POST">
                                 <div class="form-group">
-                                    <label>Produto</label>
-                                    <input type="number" class="form-control" name="produto_id" required='1'>
+                                    <label>Descrição</label>
+                                    <input type="text" class="form-control" name="nome" required='1'>
                                 </div>
                                 <div class="form-group">
                                     <label>MAC</label>
-                                    <input type="text" class="form-control" name="mac" required='1' data-inputmask="'mask': '***:***:***:***'">
+                                    <input type="text" class="form-control" name="mac" required='1' data-inputmask="'mask' : '***-***-***-***'">
                                 </div>
                                 <div class="form-group">
                                     <label>Fonte</label>
@@ -124,7 +130,11 @@
                                 </div>
                                 <div class="form-group">
                                     <label>Ampere</label>
-                                    <input type="number" step="any" min="0" max="100" class="form-control" name="ampere" required='1'>
+                                    <input type="number" class="form-control" name="ampere" required='1'>
+                                </div>
+                                <div class="form-group">
+                                    <label>Categoria</label>
+                                    <input type="text" class="form-control" name="categoria" required='1'>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="submit" class="btn btn-primary">Salvar</button>

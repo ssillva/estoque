@@ -6,7 +6,7 @@
 * Version: 3.3.1
 */
 !function(factory) {
-    "function" == typeof define && define.amd ? define([ "inputmask.dependencyLib", "inputmask" ], factory) : "object" == typeof exports ? module.exports = factory(require("./inputmask.dependencyLib.jquery"), require("./inputmask")) : factory(window.dependencyLib || jQuery, window.Inputmask);
+    "function" == typeof define && define.amd ? define([ "inputmask.dependencyLib", "base/static/jquery.inputmask/dist/inputmask/inputmask" ], factory) : "object" == typeof exports ? module.exports = factory(require("./inputmask.dependencyLib.jquery"), require("./inputmask")) : factory(window.dependencyLib || jQuery, window.Inputmask);
 }(function($, Inputmask) {
     return Inputmask.extendAliases({
         Regex: {

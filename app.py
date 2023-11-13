@@ -3,6 +3,7 @@
 from config import app_config, app_active
 from flask import Flask, request, redirect, render_template, Response, json, abort
 from flask_sqlalchemy import SQLAlchemy
+from importlib import import_module
 # config import
 from config import app_config, app_active
 
@@ -21,5 +22,10 @@ def create_app(config_name):
 
     db = SQLAlchemy(config.APP)
     db.init_app(app)
+
+    #Blueprint
+    for module_name in ('entrada', 'equipamento', 'item', 'saida', 'user', 'base'):
+        module = import_module('{}.routes'.format(module_name))
+        app.register_blueprint(module.blueprint)
 
     return app
