@@ -108,7 +108,16 @@
                             <form action="{{url_for('insert')}}" method="POST">
                                 <div class="form-group">
                                     <label>Produto</label>
-                                    <input type="number" class="form-control" name="produto_id" required='1'>
+                                    <select class="form-select" aria-label="Default select example" id="produto_id" data-live-search="true" title="Selecione um produto" name="produto_id" required="1">
+                                        <option selected>Selecione o produto</option>
+                                        {% for row in produto %}
+                                        <option value="{{row.produto_id}}">{{row.produto_name}}</option>
+                                        {% endfor %}
+
+                                        <option value="1">One</option>
+                                        <option value="2">Two</option>
+                                        <option value="3">Three</option>
+                                    </select>
                                 </div>
                                 <div class="form-group">
                                     <label>MAC</label>

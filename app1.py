@@ -1,6 +1,6 @@
 from imp import reload
-
-from flask import Flask, render_template, request, redirect, url_for, flash
+from sqlalchemy import inspect
+from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from datetime import date
 import sys
@@ -38,6 +38,8 @@ class Sis_produto(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     fk_id_item = db.relationship('Sis_item', backref='sis_produto', lazy=True)#primaryjoin="Sis_produto.id == Sis_item.produto_id")
 
+    def toDict(self):
+	    return {c.key: getattr(self, c.key) for c in inspect(self).mapper.column_attrs}
 class Sis_acesso(db.Model):
     __tablename__ = 'sis_acesso'
     idacesso = db.Column(db.Integer, primary_key=True)
@@ -64,6 +66,8 @@ class Sis_item(db.Model):
         self.volts = volts
         self.ampere = ampere
         self.produto_id = produto_id
+    def toDict(self):
+	    return {c.key: getattr(self, c.key) for c in inspect(self).mapper.column_attrs}
 
 class Cse_entrada(db.Model):
     __tablename__ = 'cse_entrada'
@@ -115,8 +119,18 @@ class Cse_saida (db.Model):
     item_id = db.Column(db.Integer, db.ForeignKey('sis_item.id_patrimonio'),
                                    primary_key=True)
 """
+@app.route("/teste", methods=['GET'])
+def Teste():
+    all_data = Sis_produto.query.all()
+    all_dataArr = []
+    for item in all_data:
+	    all_dataArr.append(item.toDict())
+
+    return jsonify(all_dataArr)
+
 @app.route("/")
 def Index():
+
     all_data = Sis_item.query.all()
     return render_template("index.html", employees=all_data)
 
@@ -199,7 +213,7 @@ def insert_entrada():
 if __name__ == "__main__":
     with app.app_context():
         db.init_app(app)
-        db.create_all()
-        #db.reflect()
+        #db.create_all()
+        db.reflect()
     app.run(debug=True)
     reload(sys)

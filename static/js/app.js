@@ -1,2 +1,3 @@
 $(":input").inputmask();
-$('.dropdown-toggle').dropdown()
+$('.dropdown-toggle').dropdown();
+
